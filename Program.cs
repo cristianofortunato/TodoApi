@@ -14,8 +14,8 @@ namespace TodoApi
     {
         public static void Main(string[] args)
         {
-            //BuildWebHost(args).Run();
-
+        BuildWebHost(args).Run();
+/* 
              var configuration = new ConfigurationBuilder()
             .AddCommandLine(args)
             .Build();
@@ -29,12 +29,21 @@ namespace TodoApi
             .Build();
 
         host.Run();
+   
+   */
         }
+        
 
-        public static IWebHost BuildWebHost(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
+        public static IWebHost BuildWebHost(string[] args) {
+            var port = Environment.GetEnvironmentVariable("PORT");
+            var address = Environment.GetEnvironmentVariable("ADDRESS");
+            if (port == null || address == null) {
+                 throw new System.ArgumentException("Environment variables PORT and ADDRESS cannot be null");
+            }            
+            return WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-                //.UseUrls("http://localhost:5001/")
+                .UseUrls("http://"+address+":"+port)
                 .Build();
+        }
     }
 }
